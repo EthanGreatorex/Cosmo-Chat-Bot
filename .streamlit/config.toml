@@ -1,0 +1,11 @@
+[runner]
+magicEnabled = false
+
+[theme]
+base="dark"
+primaryColor="#5700fd"
+backgroundColor="#08040e"
+secondaryBackgroundColor="#140b23"
+font="monospace"
+
+
