@@ -1,5 +1,8 @@
 # Welcome to Cosmo Chat Bot!
 
+### View Live
+https://huggingface.co/spaces/EggGreatorex/Cosmo-Chat-App
+
 ![cosmo](https://github.com/user-attachments/assets/8cb25f9c-26eb-49f0-9099-a3d170afe3ae)
 _Hi! I'm Cosmo. How can I assist you today?_
 
