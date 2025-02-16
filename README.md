@@ -13,6 +13,8 @@ _Hi! I'm Cosmo. How can I assist you today?_
 ## Packages Used
 - Streamlit; this is used for the UI
 - Groq; used for accessing the AI models using an API
+- pytube; for extracting the ID from a Youtube video
+- youtube_transcript_api; this fetches the transcript for a given Youtube ID
 
 ## Logic Flow
 ![image](https://github.com/user-attachments/assets/77c9a029-0dcc-403a-a8d1-abdee8d6cdbc)
