@@ -1,8 +1,10 @@
 
 from pytube import extract
-
 # youtube_transcript_api is for fetching the transcript
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound, VideoUnavailable
+
+
+
 
 def extract_id(URL):
     try:
@@ -54,7 +56,10 @@ def fetch_youtube_transcipt(url:str):
     else:
         TRANSCRIPT = fetch_transcript(URL_ID)
 
-        TRANSCRIPT = [line['text'] for line in TRANSCRIPT]
-        TRANSCRIPT = ' '.join(TRANSCRIPT)
-
-        return TRANSCRIPT
+        try:
+            TRANSCRIPT = [line['text'] for line in TRANSCRIPT]
+            TRANSCRIPT = ' '.join(TRANSCRIPT)
+        except Exception:
+            return TRANSCRIPT
+        else:
+            return TRANSCRIPT   
