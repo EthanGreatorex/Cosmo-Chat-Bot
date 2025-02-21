@@ -1,5 +1,6 @@
 streamlit
 groq
 pytube
+PyMuPDF
 youtube_transcript_api
-free-proxy
+html2text

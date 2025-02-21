@@ -1,9 +1,59 @@
 
 # IMPORTS
 import streamlit as st
-from ai_model import *
 import requests
+
+# Custom imports
+from ai_model import *
 from fetch_youtube_data import *
+from web_crawler import *
+from pdf_to_text import *
+
+
+# Functions
+def show_cosmo(AI_CONTEXT, ispdf):
+    with st._main:
+        st.markdown(
+            """
+        <style>
+            .st-emotion-cache-janbn0 {
+                flex-direction: row-reverse;
+                text-align: right;
+                background-color:  #140b23;
+            }
+
+
+        </style>
+        """,
+            unsafe_allow_html=True,
+        )
+
+
+        if "messages" not in st.session_state:
+            st.session_state.messages = [{"role":"assistant","content":"Hello! How can I assist you today?😊"}]
+
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"], avatar='./images/cosmo.png'):
+                st.markdown(message["content"])
+
+
+
+        prompt = st.chat_input("Type message...")
+
+
+
+        if prompt:
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
+            with st.chat_message("assistant", avatar='./images/cosmo.png'):
+                response = get_resp(prompt, AI_CONTEXT, st.session_state.messages, ispdf)
+                if response.startswith('ERROR'):
+                    st.write("⛔ Context is too large! Please reduce the size of the context.")
+                else:
+                    st.write(response)
+            st.session_state.messages.append({"role": "assistant", "content": response})
 
 # VARIABLES
 # This will hold any website data the user wants to give to the AI as context
@@ -11,89 +61,113 @@ AI_CONTEXT = ''
 
 st.set_page_config(layout='wide')
 
-# Setup a sidebar to enter a youtube url
+st.image(image='images/cosmo.png', width=70)
+st.title("Hello! I'm Cosmo 😀")
 
-st.write("_Click on the top left arrow to give Cosmo website links or Youtube links!_")
+st.info("_Would you like to give me some context?_")
+st.info("_Click on the top left arrow to upload a website link or pdf file!_")
 st.divider()
 
 with st.sidebar:
     
-    st.write('##### _Youtube may block the request to access transcripts_')
+    st.title("📃Cosmo Context🌐")
     st.divider()
-    url_type = st.sidebar.radio(
-        "Select URl Type",
-        options=["Web URL", "Youtube URL"]
-    )
-    
-
-
+    st.write('##### _YouTube may block the request to access transcripts_')
     st.divider()
+
+    st.subheader("Website Target")
     url = st.sidebar.text_input("Enter URL")
+    st.divider()
 
+    st.subheader("Output Options")
+    context_type = st.sidebar.radio(
+        "",
+        options=["HTML","Markdown", "Youtube URL","Chat with Cosmo"]
+    )
 
+    st.divider()
+    st.subheader("Upload PDF")
+    pdf_file = st.file_uploader("", type=['pdf'])
+    if pdf_file:
+        with st.spinner("Converting to text..."):
+            AI_CONTEXT = convert_pdf_to_txt(pdf_file)
+            st.success("Context Uploaded!")
+            st.write("_Remove pdf file to access website url features_")
+            show_cosmo(AI_CONTEXT,True)
 
+    if not pdf_file:
+        if context_type:
+            with st.spinner("Fetching..."):
+                if context_type == 'Youtube URL':
+                    if url:
+                        # Try and fetch the transcipt
+                        TRANSCRIPT = fetch_youtube_transcipt(url)
+                        if TRANSCRIPT == 'Not a valid Youtube Link':
+                            st.error("Uh oh! This doesn't seem to be a valid Youtube link.")
+                        elif TRANSCRIPT == "ERROR":
+                            st.error("Request blocked by YouTube")
+                        else:
+                            st.success("Transcipt fetched!")
+                            AI_CONTEXT = TRANSCRIPT
+                            show_cosmo(AI_CONTEXT,False)
+                            if url:
+                                st.success("Context Uploaded!")
+                    
+                elif context_type == 'HTML':
+                    if url:
+                        # Check to see if the link exists
 
-    if url:
-        with st.spinner("Fetching..."):
-            if url_type == 'Youtube URL':
-                # Try and fetch the transcipt
-                TRANSCRIPT = fetch_youtube_transcipt(url)
-                if TRANSCRIPT == 'Not a valid Youtube Link':
-                    st.error("Uh oh! This doesn't seem to be a valid Youtube link.")
-                elif TRANSCRIPT == "ERROR":
-                    st.error("Cannot fetch data... transcripts may be disabled or Youtube has blocked the request")
-                else:
-                    st.success("Transcipt fetched!")
-                    AI_CONTEXT = TRANSCRIPT
+                        try:
+                            response = requests.get(url)
+                            if response.status_code == 200:
+                                st.success("Website verified!")
+                        except Exception:
+                            st.error("That webpage doesn't seem to exist.")
+                        else:
+                            html_data = crawl_website([url], 'html')
+                            for i in range(len(html_data)):
+                                if html_data[i][1] == None:
+                                    st.error(f"Failed to crawl {html_data[i][0]}")
+                                    flag = False
+                                else:
+                                    st.success(f"Successfully crawled: {html_data[i][0]}")
+                            with st._main:
+                                st.subheader("HTML Result")
+                                st.write(html_data)
+                elif context_type == 'Markdown':
+                    if url:
+                        # Check to see if the link exists
+                        try:
+                            response = requests.get(url)
+                            if response.status_code == 200:
+                                st.success("Website verified!")
+                        except Exception:
+                            st.error("That webpage doesn't seem to exist.")
+                        else:
+                            markdown_data = crawl_website([url], 'markdown')
+                            for i in range(len(markdown_data)):
+                                if markdown_data[i][1] == None:
+                                    st.error(f"Failed to crawl {markdown_data[i][0]}")
+                                    flag = False
+                                else:
+                                    st.success(f"Successfully crawled: {markdown_data[i][0]}")
+                            with st._main:
+                                st.subheader("Markdown Result")
+                                st.write(markdown_data)
                 
-            elif url_type == 'Web URL':
-                # Check to see if the link exists
+                elif context_type == 'Chat with Cosmo':
+                    if url:
+                        AI_CONTEXT = crawl_website([url], 'markdown')[0][1]
 
-                try:
-                    response = requests.get(url)
-                    if response.status_code == 200:
-                        st.success("Website verified!")
-                except Exception:
-                    st.error("That webpage doesn't seem to exist.")
-                AI_CONTEXT = url
+                        if len(AI_CONTEXT,False) >= 100000:
+                            st.error("Context is too large! Context has been reduced.")
+                            AI_CONTEXT = url
 
-
-st.markdown(
-    """
-<style>
-    .st-emotion-cache-janbn0 {
-        flex-direction: row-reverse;
-        text-align: right;
-        background-color:  #140b23;
-    }
+                    
+                    show_cosmo(AI_CONTEXT)
+                    if url:
+                        st.success("Context Uploaded!")
+                
 
 
-</style>
-""",
-    unsafe_allow_html=True,
-)
-
-
-if "messages" not in st.session_state:
-    st.session_state.messages = [{"role":"assistant","content":"Hello! I'm Cosmo. How can I assist you today?"}]
-
-for message in st.session_state.messages:
-    with st.chat_message(message["role"], avatar='./images/cosmo.png'):
-        st.markdown(message["content"])
-
-
-
-prompt = st.chat_input("Type message...")
-
-
-
-if prompt:
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    with st.chat_message("assistant", avatar='./images/cosmo.png'):
-        response = get_resp(prompt, AI_CONTEXT, st.session_state.messages)
-        st.write(response)
-    st.session_state.messages.append({"role": "assistant", "content": response})
 
