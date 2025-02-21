@@ -156,15 +156,9 @@ with st.sidebar:
                                 st.write(markdown_data)
                 
                 elif context_type == 'Chat with Cosmo':
-                    if url:
-                        AI_CONTEXT = crawl_website([url], 'markdown')[0][1]
-
-                        if len(AI_CONTEXT,False) >= 100000:
-                            st.error("Context is too large! Context has been reduced.")
-                            AI_CONTEXT = url
-
+                    AI_CONTEXT = url
                     
-                    show_cosmo(AI_CONTEXT)
+                    show_cosmo(AI_CONTEXT, False)
                     if url:
                         st.success("Context Uploaded!")
                 
