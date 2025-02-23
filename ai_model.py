@@ -3,13 +3,13 @@ from groq import Groq
 
 GROQ_API_KEY = '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'
 
-def get_resp(prompt: str, context : str, prevchat : str, ispdf) -> str:
+def get_resp(prompt: str, context : str, prevchat : str, isFile:bool, fileType:str) -> str:
 
     client = Groq(
         api_key=GROQ_API_KEY
     )
 
-    if not ispdf:
+    if not isFile:
         try:
             chat_completion = client.chat.completions.create(
                 messages=[
@@ -20,17 +20,23 @@ def get_resp(prompt: str, context : str, prevchat : str, ispdf) -> str:
                 ],
                 model="llama-3.3-70b-versatile",
             )
-        except Exception:
-            return "ERROR"
+        except Exception as e:
+            print(e)
+            if str(e).startswith('Error code: 429'):
+                return "TOKENS USED", None, None    
+            return "ERROR", None, None
         else:
-            return chat_completion.choices[0].message.content
+            message = chat_completion.choices[0].message.content
+            token_usage = chat_completion.usage.total_tokens
+            time_taken = chat_completion.usage.total_time
+            return message, token_usage, time_taken
     else:
         try:
             chat_completion = client.chat.completions.create(
                 messages=[
                     {
                         "role": "user",
-                        "content": f"You are a friendly assitant named Cosmo. The user has uploaded a pdf file and I have converted it into text for you. You will receive a prompt, the context of the pdf file and the previous conversations you have had. Use nice formatting in your reponse through bullet points and emojis. CONTEXT: {context} PROMPT: {prompt} PREVIOUS CHATS: {prevchat}",
+                        "content": f"You are a friendly assitant named Cosmo. The user has uploaded a {fileType} file and I have converted it into text for you. You will receive a prompt, the context of the {fileType} file and the previous conversations you have had. Use nice formatting in your reponse through bullet points and tables if requested . CONTEXT: {context} PROMPT: {prompt} PREVIOUS CHATS: {prevchat}",
                     }
                 ],
                 model="llama-3.3-70b-versatile",
@@ -38,4 +44,7 @@ def get_resp(prompt: str, context : str, prevchat : str, ispdf) -> str:
         except Exception:
             return "ERROR"
         else:
-            return chat_completion.choices[0].message.content
+            message = chat_completion.choices[0].message.content
+            token_usage = chat_completion.usage.total_tokens
+            time_taken = chat_completion.usage.total_time
+            return message, token_usage, time_taken

@@ -2,6 +2,7 @@
 # IMPORTS
 import streamlit as st
 import requests
+from pathlib import Path
 
 # Custom imports
 from ai_model import *
@@ -10,8 +11,10 @@ from web_crawler import *
 from pdf_to_text import *
 
 
+
+
 # Functions
-def show_cosmo(AI_CONTEXT, ispdf):
+def show_cosmo(AI_CONTEXT, isFile,fileType):
     with st._main:
         st.markdown(
             """
@@ -21,8 +24,6 @@ def show_cosmo(AI_CONTEXT, ispdf):
                 text-align: right;
                 background-color:  #140b23;
             }
-
-
         </style>
         """,
             unsafe_allow_html=True,
@@ -48,11 +49,15 @@ def show_cosmo(AI_CONTEXT, ispdf):
                 st.markdown(prompt)
 
             with st.chat_message("assistant", avatar='./images/cosmo.png'):
-                response = get_resp(prompt, AI_CONTEXT, st.session_state.messages, ispdf)
+                response, tokens_used, time_taken = get_resp(prompt, AI_CONTEXT, st.session_state.messages, isFile, fileType)
                 if response.startswith('ERROR'):
-                    st.write("⛔ Context is too large! Please reduce the size of the context.")
+                    st.markdown("⛔ Context is too large! Please reduce the size of the context.")
+                elif response.startswith('TOKENS USED'):
+                    st.markdown("⛔ Tokens used up! Please try again later.")
                 else:
-                    st.write(response)
+                    st.markdown(response)
+                    st.markdown(f"_Tokens used: {tokens_used}_")
+                    st.markdown(f"_Time taken: {time_taken} seconds_")
             st.session_state.messages.append({"role": "assistant", "content": response})
 
 # VARIABLES
@@ -60,12 +65,47 @@ def show_cosmo(AI_CONTEXT, ispdf):
 AI_CONTEXT = ''
 
 st.set_page_config(layout='wide')
+st.markdown(
+    """
+<style>
+section.stMain.st-emotion-cache-bm2z3a.eht7o1d1 {
+  background: url(https://images.unsplash.com/photo-1713755001325-0d19ad4d271d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+}
+
+header.stAppHeader.st-emotion-cache-1fxioj7.e4hpqof0 {
+  background: url(https://images.unsplash.com/photo-1713755001325-0d19ad4d271d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+}
+
+div.st-emotion-cache-a6qe2i.e1c29vlm7 {
+  background-color: #0b0613;
+}
+
+div.st-emotion-cache-kgpedg.e1c29vlm10 {
+  background-color: #0b0613;
+}
+
+div.st-emotion-cache-1i2wz1k.e1c29vlm9 {
+  background-color: #0b0613;
+}
+
+section.stSidebar.st-emotion-cache-97h5g8.e1c29vlm0 {
+  background-color: #0b0613;
+}
+
+div.st-emotion-cache-1y34ygi.eht7o1d7 {
+  background-color: #000000;
+}
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 st.image(image='images/cosmo.png', width=70)
 st.title("Hello! I'm Cosmo 😀")
 
 st.info("_Would you like to give me some context?_")
-st.info("_Click on the top left arrow to upload a website link or pdf file!_")
+st.info("_Click on the top left arrow to upload a website link or a pdf, txt, csv file!_")
 st.divider()
 
 with st.sidebar:
@@ -86,16 +126,27 @@ with st.sidebar:
     )
 
     st.divider()
-    st.subheader("Upload PDF")
-    pdf_file = st.file_uploader("", type=['pdf'])
-    if pdf_file:
-        with st.spinner("Converting to text..."):
-            AI_CONTEXT = convert_pdf_to_txt(pdf_file)
-            st.success("Context Uploaded!")
-            st.write("_Remove pdf file to access website url features_")
-            show_cosmo(AI_CONTEXT,True)
+    st.subheader("Upload File")
+    file_upload = st.file_uploader("", type=['pdf','csv','txt'])
+    if file_upload is not None:
+        with st.spinner("Processing.."):
+            if Path(file_upload.name).suffix == '.pdf':
+                AI_CONTEXT = convert_pdf_to_txt(file_upload)
+                st.success("Context Uploaded!")
+                st.write("_Remove pdf file to access website url features_")
+                show_cosmo(AI_CONTEXT,True,'pdf')
+            elif Path(file_upload.name).suffix == '.txt':
+                AI_CONTEXT = file_upload.read().decode('utf-8')
+                st.success("Context Uploaded!")
+                st.write("_Remove txt file to access website url features_")
+                show_cosmo(AI_CONTEXT,True,'txt')
+            elif Path(file_upload.name).suffix == '.csv':
+                AI_CONTEXT = file_upload.read().decode('utf-8')
+                st.success("Context Uploaded!")
+                st.write("_Remove csv file to access website url features_")
+                show_cosmo(AI_CONTEXT,True,'csv')
 
-    if not pdf_file:
+    if not file_upload:
         if context_type:
             with st.spinner("Fetching..."):
                 if context_type == 'Youtube URL':
@@ -109,7 +160,7 @@ with st.sidebar:
                         else:
                             st.success("Transcipt fetched!")
                             AI_CONTEXT = TRANSCRIPT
-                            show_cosmo(AI_CONTEXT,False)
+                            show_cosmo(AI_CONTEXT,False,'url')
                             if url:
                                 st.success("Context Uploaded!")
                     
@@ -156,12 +207,11 @@ with st.sidebar:
                                 st.write(markdown_data)
                 
                 elif context_type == 'Chat with Cosmo':
-                    AI_CONTEXT = url
+                    if url:
+                        AI_CONTEXT = url
+
+                    print(AI_CONTEXT)
                     
-                    show_cosmo(AI_CONTEXT, False)
+                    show_cosmo(AI_CONTEXT, False,'url')
                     if url:
                         st.success("Context Uploaded!")
-                
-
-
-
