@@ -68,32 +68,39 @@ st.set_page_config(layout='wide')
 st.markdown(
     """
 <style>
-section.stMain.st-emotion-cache-bm2z3a.eht7o1d1 {
-  background: url(https://images.unsplash.com/photo-1713755001325-0d19ad4d271d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+:root {
+  --background-image: url(https://images.unsplash.com/photo-1713755001325-0d19ad4d271d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  --main-color: #a171fd;
+  --border-width: 3px;
+  --border-radius-large: 150px;
+  --border-radius-small: 10px;
 }
 
-header.stAppHeader.st-emotion-cache-1fxioj7.e4hpqof0 {
-  background: url(https://images.unsplash.com/photo-1713755001325-0d19ad4d271d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+/* Global styling with variables */
+header.stAppHeader.st-emotion-cache-1fxioj7.e4hpqof0,
+div.st-emotion-cache-0.e16xbog60,
+div.stMainBlockContainer.block-container.st-emotion-cache-t1wise.eht7o1d4,
+section.stMain.st-emotion-cache-bm2z3a.eht7o1d1,
+div.st-emotion-cache-kgpedg.e1c29vlm10,
+div.st-emotion-cache-a6qe2i.e1c29vlm7,
+section.st-emotion-cache-1w2gxio.e1blfcsg0,
+div.object-key-val,
+div.st-emotion-cache-1y34ygi.eht7o1d7,
+div.stChatMessage.st-emotion-cache-janbn0.ea2tk8x0 {
+  background: var(--background-image);
+  color: var(--main-color);
 }
 
-div.st-emotion-cache-a6qe2i.e1c29vlm7 {
-  background-color: #0b0613;
+/* Specific styles with borders and radii */
+textarea.st-bd.st-bz.st-c0.st-c1.st-c2.st-c3.st-c4.st-c5.st-c6.st-c7.st-c8.st-b9.st-c9.st-ca.st-cb.st-cc.st-cd.st-ce.st-ar.st-ef.st-ae.st-af.st-ag.st-ch.st-ai.st-aj.st-by.st-ci.st-cj.st-ck.st-eg.st-am.st-ei {
+  background: var(--background-image);
+  border: var(--border-width) solid var(--main-color);
+  border-radius: var(--border-radius-large);
 }
 
-div.st-emotion-cache-kgpedg.e1c29vlm10 {
-  background-color: #0b0613;
-}
-
-div.st-emotion-cache-1i2wz1k.e1c29vlm9 {
-  background-color: #0b0613;
-}
-
-section.stSidebar.st-emotion-cache-97h5g8.e1c29vlm0 {
-  background-color: #0b0613;
-}
-
-div.st-emotion-cache-1y34ygi.eht7o1d7 {
-  background-color: #000000;
+input.st-bd.st-bz.st-c0.st-c1.st-c2.st-c3.st-c4.st-c5.st-c6.st-c7.st-c8.st-b9.st-c9.st-ca.st-cb.st-cc.st-cd.st-ce.st-cf.st-cg.st-ae.st-af.st-ag.st-ch.st-ai.st-aj.st-by.st-ci.st-cj.st-ck {
+  border: var(--border-width) solid var(--main-color);
+  border-radius: var(--border-radius-small);
 }
 
 </style>
