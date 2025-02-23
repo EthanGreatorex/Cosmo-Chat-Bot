@@ -24,3 +24,9 @@ _Hi! I'm Cosmo. How can I assist you today?_
 ![image](https://github.com/user-attachments/assets/77c9a029-0dcc-403a-a8d1-abdee8d6cdbc)
 
 
+## 📷Previews📷
+### 🏠Main Page🏠
+![image](https://github.com/user-attachments/assets/dbf745fb-745f-4e61-bad3-e6c49984397f)
+
+### 💭Chat View💭
+![image](https://github.com/user-attachments/assets/608d6ae7-70e9-4606-a46b-0c43c8d966e5)
