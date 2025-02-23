@@ -23,7 +23,8 @@ def get_resp(prompt: str, context : str, prevchat : str, isFile:bool, fileType:s
         except Exception as e:
             print(e)
             if str(e).startswith('Error code: 429'):
-                return "TOKENS USED", None, None    
+                return "TOKENS USED", None, None
+            print("Error")    
             return "ERROR", None, None
         else:
             message = chat_completion.choices[0].message.content
@@ -41,8 +42,12 @@ def get_resp(prompt: str, context : str, prevchat : str, isFile:bool, fileType:s
                 ],
                 model="llama-3.3-70b-versatile",
             )
-        except Exception:
-            return "ERROR"
+        except Exception as e:
+            print(e)
+            if str(e).startswith('Error code: 429'):
+                return "TOKENS USED", None, None
+            print("Error")    
+            return "ERROR", None, None
         else:
             message = chat_completion.choices[0].message.content
             token_usage = chat_completion.usage.total_tokens
