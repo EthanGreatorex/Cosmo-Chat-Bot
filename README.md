@@ -27,14 +27,17 @@ https://cosmo-chat-bot.onrender.com/
 
 ## 📷Previews📷
 ### 🏠Main Page🏠
-![Screenshot 2025-02-24 110459](https://github.com/user-attachments/assets/2e30d514-a086-4e80-aa41-114f1f917b61)
+![image](https://github.com/user-attachments/assets/6b497aac-f242-4d99-8754-92746bfdada6)
+
 
 
 ### 💭Chat View💭
-![Screenshot 2025-02-24 110516](https://github.com/user-attachments/assets/d7b6abe5-ed13-42cd-9318-1c538a74ce2b)
+![image](https://github.com/user-attachments/assets/21dc29e0-43dc-4295-906e-88a161ab9980)
+
 
 ### ☀️Prefer Light Mode?☀️
-![Screenshot 2025-02-24 110615](https://github.com/user-attachments/assets/8016d41c-025d-4549-92ab-d9e4b517f6f6)
+![image](https://github.com/user-attachments/assets/dbcd15e3-7884-42cf-a343-09bca6d20af5)
+
 
 
 
