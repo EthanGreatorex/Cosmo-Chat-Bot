@@ -3,12 +3,13 @@
 ### 🚀View Live🚀
 https://cosmo-chat-bot.onrender.com/
 
-![cosmo](https://github.com/user-attachments/assets/8cb25f9c-26eb-49f0-9099-a3d170afe3ae)
-_Hi! I'm Cosmo. How can I assist you today?_
+![cosmo](https://github.com/user-attachments/assets/36f0f914-0296-49c3-9440-eb463563b6a8)
+
+# _Hi! I'm Cosmo. How can I assist you today?_
 
 ## 👋Introduction👋
 - Cosmo is an AI chat application created for a fun personal project.
-- Users can upload context to Cosmo such as website links or PDF files!
+- Users can upload context to Cosmo such as website links or files e.g., pdf, csv, txt!
 - Users also have the option to directly view the HTML or Markdown for the website they have entered!
 - Cosmo runs on the llama-3.3-70b-versatile model.
 
@@ -26,9 +27,14 @@ _Hi! I'm Cosmo. How can I assist you today?_
 
 ## 📷Previews📷
 ### 🏠Main Page🏠
-![image](https://github.com/user-attachments/assets/34164aa5-aeb4-4fe1-a503-52bc58ba4c18)
+![Screenshot 2025-02-24 110459](https://github.com/user-attachments/assets/2e30d514-a086-4e80-aa41-114f1f917b61)
 
 
 ### 💭Chat View💭
-![image](https://github.com/user-attachments/assets/224ff330-0f07-4c56-9143-1df3172d8186)
+![Screenshot 2025-02-24 110516](https://github.com/user-attachments/assets/d7b6abe5-ed13-42cd-9318-1c538a74ce2b)
+
+### ☀️Prefer Light Mode?☀️
+![Screenshot 2025-02-24 110615](https://github.com/user-attachments/assets/8016d41c-025d-4549-92ab-d9e4b517f6f6)
+
+
 
