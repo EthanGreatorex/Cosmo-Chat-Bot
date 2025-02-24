@@ -1,7 +1,7 @@
 # Welcome to Cosmo Chat Bot 🥳
 
 ### 🚀View Live🚀
-https://cosmo-chat-bot.onrender.com/
+https://cosmo-chat-bot.streamlit.app/
 
 ![cosmo](https://github.com/user-attachments/assets/36f0f914-0296-49c3-9440-eb463563b6a8)
 
