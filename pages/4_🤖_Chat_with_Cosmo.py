@@ -34,8 +34,6 @@ def show_cosmo(AI_CONTEXT):
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 
-st.image(image='images/cosmo.png', width=150)
-st.info("Ask my anything! I'm here to help!")
 if "AI_CONTEXT" not in st.session_state:
         AI_CONTEXT = ""
 else:
