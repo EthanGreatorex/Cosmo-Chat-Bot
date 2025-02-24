@@ -1,7 +1,6 @@
 import streamlit as st
 from ai_model import *
 import requests
-from fetch_youtube_data import *
 from pdf_to_text import *
 
 # FUNCTIONS
@@ -21,6 +20,7 @@ if "initialized" not in st.session_state:
     st.image(caption='Cosmo', image='./images/cosmo.png', width=100)
     st.info("Hello! I'm Cosmo 😀")
     st.info("Click the top left arrow to get started ↖️ 😀")
+    st.info("Want to switch to light mode?☀️ Click on the three dots in the top right↗️")
     st.divider()
 
 
@@ -114,7 +114,7 @@ if prompt:
             case _:
                 mood = "happy"
 
-        response, tokens_used, time_taken = get_resp(prompt, AI_CONTEXT, st.session_state.messages, mood)
+        response, tokens_used, time_taken, model_used = get_resp(prompt, AI_CONTEXT, st.session_state.messages, mood)
 
         if response == 'ERROR':
             st.markdown("Whoops! I think your input was too large")
@@ -122,8 +122,10 @@ if prompt:
             st.markdown("Whoops! I think I've run out of tokens for today")
         else:
             st.markdown(response)
-            st.markdown(f"Tokens used: {tokens_used}")
-            st.markdown(f"Time taken: {time_taken}")
+            st.markdown("_Summary_")
+            st.markdown(f"_Tokens used: {tokens_used}_")
+            st.markdown(f"_Time taken: {time_taken}_")
+            st.markdown(f"_Model Used: {model_used}_")
 
     st.session_state.messages.append({"role": "assistant", "content": response})
 
