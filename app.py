@@ -9,12 +9,6 @@ from pdf_to_text import *
 def get_pdf_text(file):
     return convert_pdf_to_txt(file)
 
-@st.cache_data
-def get_web_data(url, type):
-    if type == 'html':
-        return crawl_website([url], type)
-    elif type == 'markdown':
-        return crawl_website([url], type)
 
 # VARIABLES
 AI_CONTEXT = ''
