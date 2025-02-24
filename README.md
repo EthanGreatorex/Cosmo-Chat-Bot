@@ -11,7 +11,7 @@ https://huggingface.co/spaces/EggGreatorex/Cosmo-Chat-App
 - Cosmo is an AI chat application created for a fun personal project.
 - Users can upload context to Cosmo such as website links or files e.g., pdf, csv, txt!
 - Users also have the option to change Cosmo's mood!
-- Cosmo runs on the llama-3.3-70b-versatile model.
+- Cosmo runs on the gemma2-9b-it model and uses llama-guard-3-8b as a backup
 
 ## 📦Packages Used📦
 - Streamlit; this is used for the UI
