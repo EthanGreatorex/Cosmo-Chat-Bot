@@ -4,7 +4,7 @@ st.set_page_config(
     page_title="Cosmo App",
     page_icon="images/cosmo.png",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 st.image(image='images/cosmo.png', width=150)
