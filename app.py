@@ -15,6 +15,7 @@ from pdf_to_text import *
 # Functions
 def show_cosmo(AI_CONTEXT, isFile, fileType):
     with st._main:
+        st.divider()
         st.markdown(
         """
         <style>
@@ -78,18 +79,13 @@ AI_CONTEXT = ''
 
 st.set_page_config(layout='wide', page_title='Cosmo', page_icon='images/cosmo.png', initial_sidebar_state='collapsed',)
 
-# Conditionally render title and info boxes
-if not st.session_state.get('menu_selected'):
-    st.image(image='images/cosmo.png', width=150)
-    st.info("Hello there! I'm Cosmo 😀")
-    st.info("I'm here to help you with any questions you may have! 🤔")
-    st.info("Click on the top left arrow to get started! ↖️↖️")
+
+st.image(image='images/cosmo.png', width=150)
+st.info("Hello there! I'm Cosmo 😀")
+st.info("I'm here to help you with any questions you may have! 🤔")
+st.info("Click on the top left arrow to get started! ↖️↖️")
 
 
-
-# st.info("_Would you like to give me some context?_")
-# st.info("_Click on the top left arrow to upload a website link or a pdf, txt, csv file!_")
-# st.divider()
 
 with st.sidebar:
     st.image(image='images/cosmo.png', width=90)
@@ -109,9 +105,6 @@ with st.sidebar:
         index=0
     )
 
-    # Set menu_selected state
-    if context_type:
-        st.session_state.menu_selected = True
 
     st.divider()
     st.subheader("Upload File")
@@ -159,6 +152,7 @@ with st.sidebar:
                                 st.success("Context Uploaded!")
                     else:
                         with st._main:
+                            st.divider()
                             st.image('images/cosmo.png', width=150)
                             st.info("✖️No URL provided!✖️")
                 elif context_type == 'HTML':
@@ -186,6 +180,7 @@ with st.sidebar:
                                 st.write(html_data)
                     else:
                         with st._main:
+                            st.divider()
                             st.image('images/cosmo.png', width=150)
                             st.info("✖️No URL provided!✖️")
                 elif context_type == 'Markdown':
@@ -212,14 +207,18 @@ with st.sidebar:
                                 st.write(markdown_data)
                     else:
                         with st._main:
+                            st.divider()
                             st.image('images/cosmo.png', width=150)
                             st.info("✖️No URL provided!✖️")
                 
                 elif context_type == 'Chat with Cosmo':
                     if url:
+                        type = 'url'
                         st.success("Context Uploaded!")
                         AI_CONTEXT = url
-                        show_cosmo(AI_CONTEXT,False,'url')
-                    
-                    show_cosmo(AI_CONTEXT, False,'nothing')
+                    else:
+                        type = 'nothing'
+                        AI_CONTEXT = ''
+                
+                    show_cosmo(AI_CONTEXT, False,type)
 
