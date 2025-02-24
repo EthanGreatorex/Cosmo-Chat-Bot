@@ -115,11 +115,14 @@ if prompt:
                 mood = "happy"
 
         response, tokens_used, time_taken, model_used = get_resp(prompt, AI_CONTEXT, st.session_state.messages, mood)
+        
 
         if response == 'ERROR':
-            st.markdown("Whoops! I think your input was too large")
+            st.markdown("Whoops! I think your input was too large.")
         elif response == 'TOKENS USED':
-            st.markdown("Whoops! I think I've run out of tokens for today")
+            st.markdown("Whoops! I think I've run out of tokens! Maybe try a smaller input?")
+        elif response.strip() == 'safe' or len(response) < 15:
+            st.markdown("Whoops! I think your input was too large.")
         else:
             st.markdown(response)
             st.markdown("_Summary_")
