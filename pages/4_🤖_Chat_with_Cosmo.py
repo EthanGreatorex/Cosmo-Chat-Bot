@@ -12,8 +12,12 @@ def show_cosmo(AI_CONTEXT):
         ]
 
     for message in st.session_state.messages:
-        with st.chat_message(message["role"], avatar='./images/cosmo.png'):
-            st.markdown(message["content"])
+        if message["role"] == "assistant":
+            with st.chat_message(message["role"], avatar='./images/cosmo.png'):
+                st.markdown(message["content"])
+        else:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
     prompt = st.chat_input("Type your message here:")
     if prompt:

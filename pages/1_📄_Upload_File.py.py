@@ -21,12 +21,12 @@ if file_upload:
             st.success("PDF content extracted!")
 
             st.session_state["AI_CONTEXT"] = AI_CONTEXT
-            st.write("Context saved! You can now navigate to 'Chat with Cosmo'.")
+            st.info("I've got the content! Head over to Chat with Cosmo to ask me some questions!")
         elif file_extension in ['.txt', '.csv']:
             AI_CONTEXT = file_upload.read().decode('utf-8')
             st.success("File content loaded!")
             st.session_state["AI_CONTEXT"] = AI_CONTEXT
-            st.write("Context saved! You can now navigate to 'Chat with Cosmo'.")
+            st.info("I've got the content! Head over to Chat with Cosmo to ask me some questions!")
             
         else:
             st.error("Unsupported file format.")
