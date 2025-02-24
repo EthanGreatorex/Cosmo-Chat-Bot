@@ -16,9 +16,7 @@ https://huggingface.co/spaces/EggGreatorex/Cosmo-Chat-App
 ## 📦Packages Used📦
 - Streamlit; this is used for the UI
 - Groq; used for accessing the AI models using an API
-- pytube; for extracting the ID from a Youtube video
 - requests; used for fetching websit HTML & Markdown
-- youtube_transcript_api; this fetches the transcript for a given Youtube ID
 - PyMuPDF; used to convert a pdf document into text 
 
 ## 🧠Logic Flow🧠
