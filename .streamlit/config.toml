@@ -1,5 +1,12 @@
 [runner]
 magicEnabled = false
 
-[theme]
-base="use system setting"
+[global]
+
+disableWidgetStateDuplicationWarning = true
+
+
+showWarningOnDirectExecution = false
+
+[client]
+showErrorDetails = false
