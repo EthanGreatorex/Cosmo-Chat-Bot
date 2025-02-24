@@ -1,4 +1,3 @@
-
 # IMPORTS
 import streamlit as st
 import requests
@@ -14,24 +13,31 @@ from pdf_to_text import *
 
 
 # Functions
-def show_cosmo(AI_CONTEXT, isFile,fileType):
+def show_cosmo(AI_CONTEXT, isFile, fileType):
     with st._main:
         st.markdown(
-            """
+        """
         <style>
             .st-emotion-cache-janbn0 {
                 flex-direction: row-reverse;
                 text-align: right;
-                background-color:  #140b23;
             }
+
         </style>
         """,
-            unsafe_allow_html=True,
+        unsafe_allow_html=True,
         )
 
 
         if "messages" not in st.session_state:
-            st.session_state.messages = [{"role":"assistant","content":"Hello! How can I assist you today?😊"}]
+            if fileType == 'youtube':
+                st.session_state.messages = [{"role":"assistant","content":"Hello again! I have received your YouTube context! How can I help?😊"}]
+            elif fileType == 'url':
+                st.session_state.messages = [{"role":"assistant","content":"Hello again! I have received your website as context! How can I help?😊"}]
+            elif fileType == 'nothing':
+                st.session_state.messages = [{"role":"assistant","content":"Hello again! I see you didn't give me any context but that's fine!! How can I help?😊"}]
+            else:
+                st.session_state.messages = [{"role":"assistant","content":"Hello again! I have received your file as context! How can I help?😊"}]
 
         for message in st.session_state.messages:
             with st.chat_message(message["role"], avatar='./images/cosmo.png'):
@@ -60,66 +66,36 @@ def show_cosmo(AI_CONTEXT, isFile,fileType):
                     st.markdown(f"_Time taken: {time_taken} seconds_")
             st.session_state.messages.append({"role": "assistant", "content": response})
 
+# CODE RUN FIRST
+#-------------------------------------------------------------------------------
+
 # VARIABLES
 # This will hold any website data the user wants to give to the AI as context
+
 AI_CONTEXT = ''
 
-st.set_page_config(layout='wide')
-st.markdown(
-    """
-<style>
-:root {
-  --background-image: url(https://images.unsplash.com/photo-1713755001325-0d19ad4d271d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
-  --main-color: #a171fd;
-  --border-width: 3px;
-  --border-radius-large: 150px;
-  --border-radius-small: 10px;
-}
 
-/* Global styling with variables */
-header.stAppHeader.st-emotion-cache-1fxioj7.e4hpqof0,
-div.st-emotion-cache-0.e16xbog60,
-div.stMainBlockContainer.block-container.st-emotion-cache-t1wise.eht7o1d4,
-section.stMain.st-emotion-cache-bm2z3a.eht7o1d1,
-div.st-emotion-cache-kgpedg.e1c29vlm10,
-div.st-emotion-cache-a6qe2i.e1c29vlm7,
-section.st-emotion-cache-1w2gxio.e1blfcsg0,
-div.object-key-val,
-div.st-emotion-cache-1y34ygi.eht7o1d7,
-div.stChatMessage.st-emotion-cache-janbn0.ea2tk8x0 {
-  background: var(--background-image);
-  color: var(--main-color);
-}
 
-/* Specific styles with borders and radii */
-textarea.st-bd.st-bz.st-c0.st-c1.st-c2.st-c3.st-c4.st-c5.st-c6.st-c7.st-c8.st-b9.st-c9.st-ca.st-cb.st-cc.st-cd.st-ce.st-ar.st-ef.st-ae.st-af.st-ag.st-ch.st-ai.st-aj.st-by.st-ci.st-cj.st-ck.st-eg.st-am.st-ei {
-  background: var(--background-image);
-  border: var(--border-width) solid var(--main-color);
-  border-radius: var(--border-radius-large);
-}
+st.set_page_config(layout='wide', page_title='Cosmo', page_icon='images/cosmo.png', initial_sidebar_state='collapsed',)
 
-input.st-bd.st-bz.st-c0.st-c1.st-c2.st-c3.st-c4.st-c5.st-c6.st-c7.st-c8.st-b9.st-c9.st-ca.st-cb.st-cc.st-cd.st-ce.st-cf.st-cg.st-ae.st-af.st-ag.st-ch.st-ai.st-aj.st-by.st-ci.st-cj.st-ck {
-  border: var(--border-width) solid var(--main-color);
-  border-radius: var(--border-radius-small);
-}
+# Conditionally render title and info boxes
+if not st.session_state.get('menu_selected'):
+    st.image(image='images/cosmo.png', width=150)
+    st.info("Hello there! I'm Cosmo 😀")
+    st.info("I'm here to help you with any questions you may have! 🤔")
+    st.info("Click on the top left arrow to get started! ↖️↖️")
 
-</style>
-""",
-    unsafe_allow_html=True,
-)
 
-st.image(image='images/cosmo.png', width=70)
-st.title("Hello! I'm Cosmo 😀")
 
-st.info("_Would you like to give me some context?_")
-st.info("_Click on the top left arrow to upload a website link or a pdf, txt, csv file!_")
-st.divider()
+# st.info("_Would you like to give me some context?_")
+# st.info("_Click on the top left arrow to upload a website link or a pdf, txt, csv file!_")
+# st.divider()
 
 with st.sidebar:
-    
-    st.title("📃Cosmo Context🌐")
-    st.divider()
-    st.write('##### _YouTube may block the request to access transcripts_')
+    st.image(image='images/cosmo.png', width=90)
+    st.info("Hey! This is the context bar...🌐")
+    st.info("Select an option to get started!🥳")
+
     st.divider()
 
     st.subheader("Website Target")
@@ -129,12 +105,20 @@ with st.sidebar:
     st.subheader("Output Options")
     context_type = st.sidebar.radio(
         "",
-        options=["HTML","Markdown", "Youtube URL","Chat with Cosmo"]
+        options=['None',"HTML","Markdown", "Youtube URL","Chat with Cosmo"],
+        index=0
     )
+
+    # Set menu_selected state
+    if context_type:
+        st.session_state.menu_selected = True
 
     st.divider()
     st.subheader("Upload File")
     file_upload = st.file_uploader("", type=['pdf','csv','txt'])
+
+    st.divider()
+    st.write("###### _Original logo design created by stockgiu on [FreePik](%s)_" % 'https://www.freepik.com/author/stockgiu')
     if file_upload is not None:
         with st.spinner("Processing.."):
             if Path(file_upload.name).suffix == '.pdf':
@@ -164,13 +148,19 @@ with st.sidebar:
                             st.error("Uh oh! This doesn't seem to be a valid Youtube link.")
                         elif TRANSCRIPT == "ERROR":
                             st.error("Request blocked by YouTube")
+                            with st._main:
+                                st.image('images/cosmo.png', width=150)
+                                st.info("✖️Im sorry! I got kicked out by YouTube 😢✖️")
                         else:
                             st.success("Transcipt fetched!")
                             AI_CONTEXT = TRANSCRIPT
-                            show_cosmo(AI_CONTEXT,False,'url')
+                            show_cosmo(AI_CONTEXT,False,'youtube')
                             if url:
                                 st.success("Context Uploaded!")
-                    
+                    else:
+                        with st._main:
+                            st.image('images/cosmo.png', width=150)
+                            st.info("✖️No URL provided!✖️")
                 elif context_type == 'HTML':
                     if url:
                         # Check to see if the link exists
@@ -190,8 +180,14 @@ with st.sidebar:
                                 else:
                                     st.success(f"Successfully crawled: {html_data[i][0]}")
                             with st._main:
+                                st.image('images/cosmo.png', width=150)
+                                st.info("Here is what I have found for you! 🕵️‍♂️")
                                 st.subheader("HTML Result")
                                 st.write(html_data)
+                    else:
+                        with st._main:
+                            st.image('images/cosmo.png', width=150)
+                            st.info("✖️No URL provided!✖️")
                 elif context_type == 'Markdown':
                     if url:
                         # Check to see if the link exists
@@ -210,15 +206,20 @@ with st.sidebar:
                                 else:
                                     st.success(f"Successfully crawled: {markdown_data[i][0]}")
                             with st._main:
+                                st.image('images/cosmo.png', width=150)
+                                st.info("Here is what I have found for you! 🕵️‍♂️")
                                 st.subheader("Markdown Result")
                                 st.write(markdown_data)
+                    else:
+                        with st._main:
+                            st.image('images/cosmo.png', width=150)
+                            st.info("✖️No URL provided!✖️")
                 
                 elif context_type == 'Chat with Cosmo':
                     if url:
-                        AI_CONTEXT = url
-
-                    print(AI_CONTEXT)
-                    
-                    show_cosmo(AI_CONTEXT, False,'url')
-                    if url:
                         st.success("Context Uploaded!")
+                        AI_CONTEXT = url
+                        show_cosmo(AI_CONTEXT,False,'url')
+                    
+                    show_cosmo(AI_CONTEXT, False,'nothing')
+
