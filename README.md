@@ -1,3 +1,6 @@
+# WARNING; SINCE REPLACED BY COSMO AI
+https://github.com/EthanGreatorex/CosmoAI
+
 # Welcome to Cosmo Chat Bot 🥳
 
 ### 🚀View Live🚀
